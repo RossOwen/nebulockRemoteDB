@@ -1,0 +1,37 @@
+Author: Ross Owen
+Last updated: 3/26/2015 3:07 AM
+
+Compile with:
+
+javac -cp servlet-api-2.5.jar:jetty-all-7.0.2.v20100331.jar Driver.java DBServlet.java
+
+Run with:
+
+java -cp .:servlet-api-2.5.jar:jetty-all-7.0.2.v20100331.jar:mysql-connector-java-5.1.29-bin.jar Driver
+
+
+
+
+Using environment variables:
+
+Compile:
+
+javac -cp servlet-api-$SERVLET_API_VERSION.jar:jetty-all-$JETTY_VERSION.jar Driver.java DBServlet.java 
+
+Run:
+
+java -cp .:servlet-api-$SERVLET_API_VERSION.jar:jetty-all-$JETTY_VERSION.jar:mysql-connector-java-$MYSQL_VERSION-bin.jar Driver 
+
+
+
+Note that to use these commands, environment variables must be set correctly. To do so, type the following in the command line:
+
+export JETTY_VERSION=7.0.2.v20100331
+export MYSQL_VERSION=5.1.29
+export SERVLET_API_VERSION=2.5
+
+Then, navigate to your home directory (cd ~) and edit the cshrc file (vim .cshrc) to include:
+
+setenv JETTY_VERSION 7.0.2.v20100331
+setenv MYSQL_VERSION 5.1.29
+setenv SERVLET_API_VERSION 2.5
