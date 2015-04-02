@@ -1,13 +1,13 @@
 Author: Ross Owen
-Last updated: 3/26/2015 3:07 AM
+Last updated: 4/1/2015 11:21 PM
 
 Compile with:
 
-javac -cp servlet-api-2.5.jar:jetty-all-7.0.2.v20100331.jar Driver.java DBServlet.java
+javac -cp servlet-api-2.5.jar:jetty-all-7.0.2.v20100331.jar Driver.java DBServlet.java:java-json.jar
 
 Run with:
 
-java -cp .:servlet-api-2.5.jar:jetty-all-7.0.2.v20100331.jar:mysql-connector-java-5.1.29-bin.jar Driver
+java -cp .:servlet-api-2.5.jar:jetty-all-7.0.2.v20100331.jar:mysql-connector-java-5.1.29-bin.jar:java-json.jar Driver
 
 
 

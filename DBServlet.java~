@@ -81,7 +81,14 @@ public class DBServlet extends HttpServlet {
         }
         else if (req.getRequestURI().equalsIgnoreCase("/bin/doGetVaults")){
              doGetVaults(req,resp);
-        } else {
+        }
+        else if(req.getRequestURI().equalsIgnoreCase("/bin/doGetEntries")){
+             doGetEntries(req,resp);
+        }
+        else if(req.getRequestURI().equalsIgnoreCase("/bin/doCreateEntry")){
+             doCreateEntry(req,resp);
+        }
+        else {
              resp.getWriter().println("INVALID REQUEST");
         }
     }
@@ -387,6 +394,94 @@ private void doLogin(HttpServletRequest req, HttpServletResponse resp) throws IO
 							sendFailure(out, "Failed to authenticate.", null);
 
 						}
+        }
+        catch (Exception e)
+        {
+ 						sendError(out, "The server was unable to proccess your request. Try again later!",null);
+
+						e.printStackTrace();
+        }
+
+    }
+
+    private void doCreateEntry(HttpServletRequest req, HttpServletResponse resp) throws IOException
+    {    
+        PrintWriter out = resp.getWriter();
+        try
+        {
+            String email = req.getParameter("email");
+            String password = req.getParameter("password");
+						int vaultID = java.lang.Integer.parseInt(req.getParameter("vaultID"));
+						String entryName = req.getParameter("entryName");
+            String text = req.getParameter("text");
+
+            System.err.println(email);
+            System.err.println(password);
+						System.err.println(vaultID);
+            System.err.println(entryName);
+						System.err.println(text);
+						
+						
+						int accountID = -1; 
+						if((accountID = authenticateAndReturnAccountID(email, password)) != -1) {
+
+		          PreparedStatement statement = conn.prepareStatement("INSERT INTO Entries (vaultID, emailCreatedBy, entryName, text) VALUES(?,?,?,?)");
+		          statement.setInt(1, vaultID);
+              statement.setString(2, email);
+		          statement.setString(3, entryName);
+							statement.setString(4, text);
+            int updated = statement.executeUpdate();
+
+            if (updated == 1)
+                out.println("{\"result\":\"success\"}");
+            else
+                sendFailure(out, "derp", null);
+
+					} else {
+
+							sendFailure(out, "Invalid password", null);
+
+					}
+        }
+        catch (Exception e)
+        {
+ 						sendError(out, "The server was unable to process your request. Try again later!", null);
+
+						e.printStackTrace();
+        }
+
+    }
+    private void doGetEntries(HttpServletRequest req, HttpServletResponse resp) throws IOException
+    {    
+        PrintWriter out = resp.getWriter();
+        try
+        {
+            int vaultID = java.lang.Integer.parseInt(req.getParameter("vaultID"));
+
+		        PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM Entries WHERE vaultID = ?");
+		        preparedStatement.setInt(1, vaultID);
+
+						ResultSet rs = preparedStatement.executeQuery();
+
+						JSONObject retval = new JSONObject();
+						JSONArray entries = new JSONArray();
+
+						while (rs.next()) {
+								
+							JSONObject entry = new JSONObject();
+
+							entry.put("vaultID",  rs.getInt("vaultID"));
+							entry.put("emailCreatedBy",  rs.getString("emailCreatedBy"));
+							entry.put("entryName",  rs.getString("entryName"));
+							entry.put("Text",  rs.getString("Text"));
+
+							entries.put(entry);		
+															
+						}
+
+						retval.put("entries" , entries);
+
+						sendSuccess(out, retval);
         }
         catch (Exception e)
         {
