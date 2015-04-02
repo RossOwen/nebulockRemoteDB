@@ -430,18 +430,18 @@ private void doLogin(HttpServletRequest req, HttpServletResponse resp) throws IO
               statement.setString(2, email);
 		          statement.setString(3, entryName);
 							statement.setString(4, text);
-            int updated = statement.executeUpdate();
+              int updated = statement.executeUpdate();
 
-            if (updated == 1)
-                out.println("{\"result\":\"success\"}");
-            else
-                sendFailure(out, "derp", null);
+              if (updated == 1)
+                  out.println("{\"result\":\"success\"}");
+              else
+                  sendFailure(out, "derp", null);
 
-					} else {
+					  } else {
 
-							sendFailure(out, "Invalid password", null);
+							  sendFailure(out, "Invalid password", null);
 
-					}
+					  }
         }
         catch (Exception e)
         {
